@@ -1,31 +1,47 @@
 package br.com.urbieta.jeferson;
 
-import br.com.urbieta.jeferson.service.EmitterService;
+import br.com.urbieta.jeferson.service.CommandService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Scanner;
 
 import static java.lang.System.exit;
 
 @SpringBootApplication
 public class SpringBootConsoleApplication implements CommandLineRunner {
 
-    @Autowired
-    private EmitterService emitterService;
+    private static final Logger logger = Logger.getLogger(SpringBootConsoleApplication.class);
 
-    public static void main(String[] args) throws Exception {
+    @Autowired
+    private CommandService commandService;
+
+    public static void main(String[] args) {
         SpringApplication app = new SpringApplication(SpringBootConsoleApplication.class);
         app.setBannerMode(Banner.Mode.OFF);
         app.run(args);
     }
 
     @Override
-    public void run(String... args) throws Exception {
-
-        emitterService.emit();
-
+    public void run(String... args) {
+        try {
+            commandService.showHelp();
+            Scanner scan = new Scanner(System.in);
+            while (scan.hasNext()) {
+                String line = scan.nextLine();
+                commandService.executeCommand(line);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
         exit(0);
     }
 }

@@ -2,20 +2,32 @@ package br.com.urbieta.jeferson.model.enumeration;
 
 public enum EnumCommands {
 
-    FIND_USERS,
+    HELP(0, "Mostra os comandos implemetados no aplicativo"),
 
-    LIST_USERS,
+    CREATE_ROUTER(1, "Cria um roteador com os dados informados"),
 
-    FIND_FILE,
+    EMIT_MESSAGE(2, "Emite uma messagem com os dados informados"),
 
-    HAVE_FILE,
+    ROUTER_LIST(3, "Lista todos os Roteadores ativos na maquina"),
 
-    FIND_FILES,
+    ROUTER_DETAIL(4, "Mostra as informações do roteador como a tabela de roteamento"),
 
-    LIST_FILES,
+    STOP_ROUTER(5, "Para a execução de um roteador");
 
-    SEND_FILE,
 
-    UPLOAD_FILE;
+    private Integer index;
+    private String descricao;
 
+    EnumCommands(Integer index, String descricao) {
+        this.index = index;
+        this.descricao = descricao;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
 }

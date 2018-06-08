@@ -1,0 +1,8 @@
+[ERROR] 08/06/2018 00:04:23 SpringBootConsoleApplication.java run - java.lang.IllegalArgumentException: No enum constant br.com.urbieta.jeferson.model.enumeration.EnumCommands.LIST_ROUTE
+[ERROR] 08/06/2018 00:22:00 CommandService.java clearConsole - java.io.IOException: Cannot run program "cls": CreateProcess error=2, O sistema não pode encontrar o arquivo especificado
+[ERROR] 08/06/2018 00:22:02 CommandService.java clearConsole - java.io.IOException: Cannot run program "cls": CreateProcess error=2, O sistema não pode encontrar o arquivo especificado
+[ERROR] 08/06/2018 00:22:06 CommandService.java clearConsole - java.io.IOException: Cannot run program "cls": CreateProcess error=2, O sistema não pode encontrar o arquivo especificado
+[ERROR] 08/06/2018 00:22:17 CommandService.java clearConsole - java.io.IOException: Cannot run program "cls": CreateProcess error=2, O sistema não pode encontrar o arquivo especificado
+[ERROR] 08/06/2018 00:22:42 CommandService.java clearConsole - java.io.IOException: Cannot run program "cls": CreateProcess error=2, O sistema não pode encontrar o arquivo especificado
+[ERROR] 08/06/2018 00:22:50 CommandService.java clearConsole - java.io.IOException: Cannot run program "cls": CreateProcess error=2, O sistema não pode encontrar o arquivo especificado
+[ERROR] 08/06/2018 00:23:06 CommandService.java clearConsole - java.io.IOException: Cannot run program "cls": CreateProcess error=2, O sistema não pode encontrar o arquivo especificado

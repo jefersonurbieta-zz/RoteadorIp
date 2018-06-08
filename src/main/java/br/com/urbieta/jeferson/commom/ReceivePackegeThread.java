@@ -33,7 +33,7 @@ public class ReceivePackegeThread extends Thread {
                 new RouterProcessingThread(connection, router, receivePacket).start();
             }
         } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
