@@ -10,12 +10,15 @@ import java.util.List;
 public class RouterService {
 
     @Autowired
+    ScannerService scannerService;
+
+    @Autowired
     ConnectionService connectionService;
 
     private List<Router> routers;
 
     public void createRouter(){
-
+        Integer routerPort = scannerService.getInteger("Digite a porta do roteador default:");
     }
 
 }
