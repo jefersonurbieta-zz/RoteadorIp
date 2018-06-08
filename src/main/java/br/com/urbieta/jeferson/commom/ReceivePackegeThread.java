@@ -18,6 +18,11 @@ public class ReceivePackegeThread extends Thread {
 
     private boolean running;
 
+    public ReceivePackegeThread(Connection connection, Router router) {
+        this.connection = connection;
+        this.router = router;
+    }
+
     public void run() {
         logger.info("Iniciado Thread Server Receive");
         try {
@@ -25,7 +30,7 @@ public class ReceivePackegeThread extends Thread {
                 byte[] receiveData = new byte[1024];
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 connection.getServerSocket().receive(receivePacket);
-//                new RCAServerProcessRequisition(serverSocket, preferences, receivePacket).start();
+                new RouterProcessingThread(connection, router, receivePacket).start();
             }
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
