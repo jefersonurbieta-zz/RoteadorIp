@@ -7,31 +7,31 @@ import java.util.List;
 
 public class Router {
 
-    private Integer porta;
+    private Integer port;
 
-    private List<Redirection> tabelaRoteamento;
+    private List<Redirection> routingTable;
 
     private ReceivePackegeThread receiveThread;
 
     public Router(Integer porta) {
-        this.porta = porta;
-        this.tabelaRoteamento = new ArrayList<>();
+        this.port = porta;
+        this.routingTable = new ArrayList<>();
     }
 
-    public Integer getPorta() {
-        return porta;
+    public Integer getPort() {
+        return port;
     }
 
-    public void setPorta(Integer porta) {
-        this.porta = porta;
+    public void setPort(Integer porta) {
+        this.port = porta;
     }
 
-    public List<Redirection> getTabelaRoteamento() {
-        return tabelaRoteamento;
+    public List<Redirection> getRoutingTable() {
+        return routingTable;
     }
 
-    public void setTabelaRoteamento(List<Redirection> tabelaRoteamento) {
-        this.tabelaRoteamento = tabelaRoteamento;
+    public void setRoutingTable(List<Redirection> routingTable) {
+        this.routingTable = routingTable;
     }
 
     public ReceivePackegeThread getReceiveThread() {

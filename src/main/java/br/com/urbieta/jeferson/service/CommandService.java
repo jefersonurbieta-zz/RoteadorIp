@@ -2,6 +2,7 @@ package br.com.urbieta.jeferson.service;
 
 import br.com.urbieta.jeferson.model.enumeration.EnumCommands;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -11,10 +12,12 @@ public class CommandService {
 
     private static final Logger logger = Logger.getLogger(CommandService.class);
 
-    private Scanner scanner;
+    @Autowired
+    private RouterService routerService;
+
 
     public void executeCommand(String commandString) {
-        EnumCommands command = identifyCommand(commandString);
+    	EnumCommands command = identifyCommand(commandString);
         if (command == null) {
             showHelp();
         } else {

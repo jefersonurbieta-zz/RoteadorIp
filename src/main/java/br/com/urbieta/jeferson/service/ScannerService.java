@@ -13,14 +13,18 @@ public class ScannerService {
         this.scanner = new Scanner(System.in);
     }
 
-    public String getString(String mensagem) {
-        System.out.println(mensagem);
+    public String getString(String message) {
+        System.out.println(message);
         return scanner.nextLine();
     }
 
-    public Integer getInteger(String mensagem) {
-        System.out.println(mensagem);
+    public Integer getInteger(String message) {
+        System.out.println(message);
         return scanner.nextInt();
+    }
+    
+    public void showMessage(String message) {
+        System.out.println(message);
     }
 
 }

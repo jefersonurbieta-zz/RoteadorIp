@@ -5973,3 +5973,24 @@ Unconditional classes:
 
 
 2018-06-08 00:29:46.135  INFO 7340 --- [main] b.c.u.j.SpringBootConsoleApplication     : Started SpringBootConsoleApplication in 1.419 seconds (JVM running for 2.64)
+2018-06-08 21:07:41.326  INFO 4454 --- [main] b.c.u.j.SpringBootConsoleApplication     : Starting SpringBootConsoleApplication on lab02-l12 with PID 4454 (/home/201719060355/eclipse-workspace/RoteadorIp/target/classes started by 201719060355 in /home/201719060355/eclipse-workspace/RoteadorIp)
+2018-06-08 21:07:41.328  INFO 4454 --- [main] b.c.u.j.SpringBootConsoleApplication     : No active profile set, falling back to default profiles: default
+2018-06-08 21:07:41.361  INFO 4454 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@3ba9ad43: startup date [Fri Jun 08 21:07:41 AMT 2018]; root of context hierarchy
+2018-06-08 21:07:41.805  INFO 4454 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-06-08 21:07:41.815  INFO 4454 --- [main] b.c.u.j.SpringBootConsoleApplication     : Started SpringBootConsoleApplication in 0.743 seconds (JVM running for 1.366)
+2018-06-08 21:08:04.449  INFO 4482 --- [main] b.c.u.j.SpringBootConsoleApplication     : Starting SpringBootConsoleApplication on lab02-l12 with PID 4482 (/home/201719060355/eclipse-workspace/RoteadorIp/target/classes started by 201719060355 in /home/201719060355/eclipse-workspace/RoteadorIp)
+2018-06-08 21:08:04.451  INFO 4482 --- [main] b.c.u.j.SpringBootConsoleApplication     : No active profile set, falling back to default profiles: default
+2018-06-08 21:08:04.480  INFO 4482 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@1622f1b: startup date [Fri Jun 08 21:08:04 AMT 2018]; root of context hierarchy
+2018-06-08 21:08:04.863  INFO 4482 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-06-08 21:08:04.873  INFO 4482 --- [main] b.c.u.j.SpringBootConsoleApplication     : Started SpringBootConsoleApplication in 0.628 seconds (JVM running for 0.961)
+2018-06-08 21:08:29.469  INFO 4514 --- [main] b.c.u.j.SpringBootConsoleApplication     : Starting SpringBootConsoleApplication on lab02-l12 with PID 4514 (/home/201719060355/eclipse-workspace/RoteadorIp/target/classes started by 201719060355 in /home/201719060355/eclipse-workspace/RoteadorIp)
+2018-06-08 21:08:29.471  INFO 4514 --- [main] b.c.u.j.SpringBootConsoleApplication     : No active profile set, falling back to default profiles: default
+2018-06-08 21:08:29.500  INFO 4514 --- [main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@3e2e18f2: startup date [Fri Jun 08 21:08:29 AMT 2018]; root of context hierarchy
+2018-06-08 21:08:29.888  INFO 4514 --- [main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-06-08 21:08:29.899  INFO 4514 --- [main] b.c.u.j.SpringBootConsoleApplication     : Started SpringBootConsoleApplication in 0.607 seconds (JVM running for 0.963)
+2018-06-08 21:08:45.555  INFO 4514 --- [Thread-2] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@3e2e18f2: startup date [Fri Jun 08 21:08:29 AMT 2018]; root of context hierarchy
+2018-06-08 21:08:45.557  INFO 4514 --- [Thread-2] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-06-08 21:08:47.308  INFO 4482 --- [Thread-2] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@1622f1b: startup date [Fri Jun 08 21:08:04 AMT 2018]; root of context hierarchy
+2018-06-08 21:08:47.310  INFO 4482 --- [Thread-2] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-06-08 21:08:48.355  INFO 4454 --- [Thread-2] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@3ba9ad43: startup date [Fri Jun 08 21:07:41 AMT 2018]; root of context hierarchy
+2018-06-08 21:08:48.356  INFO 4454 --- [Thread-2] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown

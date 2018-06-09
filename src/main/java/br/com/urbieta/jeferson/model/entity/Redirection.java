@@ -10,13 +10,6 @@ public class Redirection {
 
     private Integer interfaceSaida;
 
-    public Redirection(String destino, Integer mascara, String gateway, Integer interfaceSaida) {
-        this.destino = destino;
-        this.mascara = mascara;
-        this.gateway = gateway;
-        this.interfaceSaida = interfaceSaida;
-    }
-
     public String getDestino() {
         return destino;
     }
