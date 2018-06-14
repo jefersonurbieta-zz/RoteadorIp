@@ -20,7 +20,8 @@ public class ScannerService {
 
     public Integer getInteger(String message) {
         System.out.println(message);
-        return scanner.nextInt();
+        String line = scanner.nextLine();
+        return Integer.valueOf(line);
     }
     
     public void showMessage(String message) {

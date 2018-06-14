@@ -2,28 +2,28 @@ package br.com.urbieta.jeferson.model.entity;
 
 public class Redirection {
 
-    private String destino;
+    private String destiny;
 
-    private Integer mascara;
+    private Integer mask;
 
     private String gateway;
 
-    private Integer interfaceSaida;
+    private Integer interfaceOutput;
 
-    public String getDestino() {
-        return destino;
+    public String getDestiny() {
+        return destiny;
     }
 
-    public void setDestino(String destino) {
-        this.destino = destino;
+    public void setDestiny(String destiny) {
+        this.destiny = destiny;
     }
 
-    public Integer getMascara() {
-        return mascara;
+    public Integer getMask() {
+        return mask;
     }
 
-    public void setMascara(Integer mascara) {
-        this.mascara = mascara;
+    public void setMask(Integer mask) {
+        this.mask = mask;
     }
 
     public String getGateway() {
@@ -34,11 +34,11 @@ public class Redirection {
         this.gateway = gateway;
     }
 
-    public Integer getInterfaceSaida() {
-        return interfaceSaida;
+    public Integer getInterfaceOutput() {
+        return interfaceOutput;
     }
 
-    public void setInterfaceSaida(Integer interfaceSaida) {
-        this.interfaceSaida = interfaceSaida;
+    public void setInterfaceOutput(Integer interfaceOutput) {
+        this.interfaceOutput = interfaceOutput;
     }
 }

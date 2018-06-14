@@ -1,11 +1,10 @@
 package br.com.urbieta.jeferson.service;
 
+import br.com.urbieta.jeferson.exception.ApplicationException;
 import br.com.urbieta.jeferson.model.enumeration.EnumCommands;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Scanner;
 
 @Service
 public class CommandService {
@@ -15,18 +14,42 @@ public class CommandService {
     @Autowired
     private RouterService routerService;
 
+    @Autowired
+    private EmitterService emitterService;
 
     public void executeCommand(String commandString) {
-    	EnumCommands command = identifyCommand(commandString);
-        if (command == null) {
-            showHelp();
-        } else {
-            System.out.println(command.name());
+        try {
+            EnumCommands command = identifyCommand(commandString);
+            if (command == null) {
+                showHelp();
+            } else {
+                switch (command) {
+                    case EMIT_MESSAGE:
+                        emitterService.emit();
+                        break;
+                    case ROUTER_LIST:
+                        routerService.routerList();
+                        break;
+                    case ROUTER_DETAIL:
+                        routerService.routerDetail();
+                        break;
+                    case CREATE_ROUTER:
+                        routerService.createRouter();
+                        break;
+                    case STOP_ROUTER:
+                        routerService.stopRouter();
+                        break;
+                    case HELP:
+                        showHelp();
+                        break;
+                }
+            }
+        } catch (ApplicationException e) {
+            e.printStackTrace();
         }
     }
 
     private EnumCommands identifyCommand(String command) {
-
         if (command.length() == 1) {
             Integer index = Integer.valueOf(command);
             return getCommandByIndex(index);
@@ -50,8 +73,13 @@ public class CommandService {
     }
 
     public void showHelp() {
+        String leftAlignFormat = "| %-7s | %-14s | %-65s |%n";
+        System.out.format("+---------+----------------+-------------------------------------------------------------------+%n");
+        System.out.format("| Command | Name           | Description                                                       |%n");
+        System.out.format("+---------+----------------+-------------------------------------------------------------------+%n");
         for (EnumCommands enumCommand : EnumCommands.values()) {
-            System.out.println(enumCommand.getIndex() + ". " + enumCommand.name() + " - " + enumCommand.getDescricao());
+            System.out.format(leftAlignFormat, enumCommand.getIndex(), enumCommand.name(), enumCommand.getDescricao());
         }
+        System.out.format("+---------+----------------+-------------------------------------------------------------------+%n");
     }
 }
