@@ -21,6 +21,7 @@ public class ReceivePackegeThread extends Thread {
     public ReceivePackegeThread(Connection connection, Router router) {
         this.connection = connection;
         this.router = router;
+        this.running = true;
     }
 
     public void run() {

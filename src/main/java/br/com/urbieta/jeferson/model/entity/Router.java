@@ -2,35 +2,32 @@ package br.com.urbieta.jeferson.model.entity;
 
 import br.com.urbieta.jeferson.commom.ReceivePackegeThread;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Router {
 
     private Integer port;
 
-    private List<Redirection> routingTable;
+    private RoutingTable routingTable;
 
     private ReceivePackegeThread receiveThread;
 
     public Router(Integer porta) {
         this.port = porta;
-        this.routingTable = new ArrayList<>();
+        this.routingTable = new RoutingTable();
     }
 
     public Integer getPort() {
         return port;
     }
 
-    public void setPort(Integer porta) {
-        this.port = porta;
+    public void setPort(Integer port) {
+        this.port = port;
     }
 
-    public List<Redirection> getRoutingTable() {
+    public RoutingTable getRoutingTable() {
         return routingTable;
     }
 
-    public void setRoutingTable(List<Redirection> routingTable) {
+    public void setRoutingTable(RoutingTable routingTable) {
         this.routingTable = routingTable;
     }
 

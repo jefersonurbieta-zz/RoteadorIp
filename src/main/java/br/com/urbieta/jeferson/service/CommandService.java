@@ -25,7 +25,12 @@ public class CommandService {
             } else {
                 switch (command) {
                     case EMIT_MESSAGE:
-                        emitterService.emit();
+                        if (commandString.contains(EnumCommands.EMIT_MESSAGE.getNome())) {
+                            String data = commandString.replace(EnumCommands.EMIT_MESSAGE.getNome() + " ", "");
+                            emitterService.emitCommand(data);
+                        } else {
+                            emitterService.emit();
+                        }
                         break;
                     case ROUTER_LIST:
                         routerService.routerList();
@@ -34,7 +39,12 @@ public class CommandService {
                         routerService.routerDetail();
                         break;
                     case CREATE_ROUTER:
-                        routerService.createRouter();
+                        if (commandString.contains(EnumCommands.CREATE_ROUTER.getNome())) {
+                            String data = commandString.replace(EnumCommands.CREATE_ROUTER.getNome() + " ", "");
+                            routerService.createRouterCommand(data);
+                        } else {
+                            routerService.createRouter();
+                        }
                         break;
                     case STOP_ROUTER:
                         routerService.stopRouter();
@@ -55,8 +65,8 @@ public class CommandService {
             return getCommandByIndex(index);
         } else {
             try {
-                String formattedCommand = command.replace(" ", "_");
-                return EnumCommands.valueOf(formattedCommand.toUpperCase());
+                String[] commandParts = command.split(" ");
+                return getCommandByName(commandParts[0]);
             } catch (IllegalArgumentException e) {
                 return null;
             }
@@ -66,6 +76,15 @@ public class CommandService {
     private EnumCommands getCommandByIndex(Integer index) {
         for (EnumCommands enumCommands : EnumCommands.values()) {
             if (enumCommands.getIndex().equals(index)) {
+                return enumCommands;
+            }
+        }
+        return null;
+    }
+
+    private EnumCommands getCommandByName(String name) {
+        for (EnumCommands enumCommands : EnumCommands.values()) {
+            if (enumCommands.getNome().toUpperCase().equals(name.toUpperCase())) {
                 return enumCommands;
             }
         }

@@ -7,43 +7,44 @@ import org.springframework.stereotype.Service;
 
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ConnectionService {
 
     private static final Logger logger = Logger.getLogger(ConnectionService.class);
 
-    private List<Connection> conexoes;
-
-    public ConnectionService() {
-        conexoes = new ArrayList<>();
-    }
+    private Map<Integer, Connection> conexoes = new HashMap<>();
 
     public Connection getConnection(Integer porta) throws ApplicationException {
-        Connection connectionEncontrada = null;
-        for (Connection connection : conexoes) {
-            if (connection.getPorta().equals(porta)) {
-                connectionEncontrada = connection;
-                break;
-            }
-        }
+        Connection connectionEncontrada = conexoes.get(porta);
         if (connectionEncontrada == null) {
             connectionEncontrada = createConnection(porta);
         }
         return connectionEncontrada;
     }
 
-    private Connection createConnection(Integer porta) throws ApplicationException {
+    private Connection createConnection(Integer port) throws ApplicationException {
         try {
-            DatagramSocket serverSocket = new DatagramSocket(porta);
-            Connection connection = new Connection(porta, serverSocket);
-            conexoes.add(connection);
+            Connection connection = conexoes.get(port);
+            if (connection == null) {
+                DatagramSocket serverSocket = new DatagramSocket(port);
+                connection = new Connection(port, serverSocket);
+                conexoes.put(port, connection);
+            }
             return connection;
         } catch (SocketException e) {
             logger.error(e);
             throw new ApplicationException(e);
+        }
+    }
+
+    public void closeConnection(Integer port) {
+        Connection connection = conexoes.get(port);
+        if (connection != null) {
+            connection.getServerSocket().close();
+            conexoes.remove(port);
         }
     }
 }

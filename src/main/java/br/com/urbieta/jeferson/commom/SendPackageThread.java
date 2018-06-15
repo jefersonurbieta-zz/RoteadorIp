@@ -8,27 +8,26 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 
-
 public class SendPackageThread extends Thread {
 
     private static final Logger logger = Logger.getLogger(SendPackageThread.class);
 
     private Connection connection;
 
-    private Package aPackage;
+    private Package packageToSend;
 
-    public SendPackageThread(Package aPackage, Connection connection) {
-        this.aPackage = aPackage;
+    public SendPackageThread(Package packageToSend, Connection connection) {
+        this.packageToSend = packageToSend;
         this.connection = connection;
     }
 
     public void run() {
         try {
-            byte[] sendData = aPackage.getMensagem().getBytes();
-            InetAddress iPDestino = InetAddress.getByName(aPackage.getRoteador());
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, iPDestino, aPackage.getPorta());
+            InetAddress iPDestino = InetAddress.getByName(packageToSend.getRoteador());
+            byte[] sendData = packageToSend.toString().getBytes();
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, iPDestino, packageToSend.getPorta());
             connection.getServerSocket().send(sendPacket);
-            logger.info(" SENT: " + aPackage.getMensagem() + " - BYTES: " + aPackage.getMensagem().getBytes().length);
+            logger.info(" SENT: " + packageToSend.getMensagem() + " - BYTES: " + packageToSend.getMensagem().getBytes().length);
         } catch (IOException e) {
             logger.error(e);
         }
