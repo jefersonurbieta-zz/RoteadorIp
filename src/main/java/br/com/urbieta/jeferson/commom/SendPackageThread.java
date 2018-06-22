@@ -1,7 +1,7 @@
 package br.com.urbieta.jeferson.commom;
 
-import br.com.urbieta.jeferson.model.entity.Connection;
-import br.com.urbieta.jeferson.model.entity.Package;
+import br.com.urbieta.jeferson.model.Connection;
+import br.com.urbieta.jeferson.model.Package;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -16,18 +16,24 @@ public class SendPackageThread extends Thread {
 
     private Package packageToSend;
 
-    public SendPackageThread(Package packageToSend, Connection connection) {
+    private String routerAddress;
+
+    private Integer routerPort;
+
+    public SendPackageThread(String routerAddress, Integer routerPort, Package packageToSend, Connection connection) {
+        this.routerAddress = routerAddress;
+        this.routerPort = routerPort;
         this.packageToSend = packageToSend;
         this.connection = connection;
     }
 
     public void run() {
         try {
-            InetAddress iPDestino = InetAddress.getByName(packageToSend.getRoteador());
+            InetAddress iPDestino = InetAddress.getByName(routerAddress);
             byte[] sendData = packageToSend.toString().getBytes();
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, iPDestino, packageToSend.getPorta());
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, iPDestino, routerPort);
             connection.getServerSocket().send(sendPacket);
-            logger.info(" SENT: " + packageToSend.getMensagem() + " - BYTES: " + packageToSend.getMensagem().getBytes().length);
+            logger.info(" SENT: " + sendData + " - BYTES: " + sendData.length);
         } catch (IOException e) {
             logger.error(e);
         }

@@ -1,10 +1,9 @@
 package br.com.urbieta.jeferson.service;
 
-import br.com.urbieta.jeferson.commom.ReceivePackegeThread;
 import br.com.urbieta.jeferson.exception.ApplicationException;
-import br.com.urbieta.jeferson.model.entity.Connection;
-import br.com.urbieta.jeferson.model.entity.Redirection;
-import br.com.urbieta.jeferson.model.entity.Router;
+import br.com.urbieta.jeferson.model.Connection;
+import br.com.urbieta.jeferson.model.Redirection;
+import br.com.urbieta.jeferson.model.Router;
 import br.com.urbieta.jeferson.utils.RouterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,40 +26,35 @@ public class RouterService {
     public void createRouter() {
         Integer routerPort = scannerService.getInteger("Digite a porta do roteador default:");
         String routersForRedirection = scannerService.getString("Digite a lista de endereçõs de encaminhamento:");
-        Router router = new Router(routerPort);
-        List<Redirection> redirections = RouterUtils.formattingRoutingTable(routersForRedirection);
-        router.getRoutingTable().setRoutingTable(redirections);
-        createRouter(router);
+        String[] routersForRedirectionInParts = routersForRedirection.split(" ");
+        List<Redirection> redirections = RouterUtils.formattingRoutingTableFromCommand(routersForRedirectionInParts);
+        createRouter(routerPort, redirections);
     }
 
     public void createRouterCommand(String command) {
         String[] parts = command.split(" ");
         Integer routerPort = Integer.valueOf(parts[0]);
-        Router router = new Router(routerPort);
         List<Redirection> redirections = RouterUtils.formattingRoutingTableFromCommand(parts);
-        router.getRoutingTable().setRoutingTable(redirections);
-        createRouter(router);
+        createRouter(routerPort, redirections);
     }
 
-    private void createRouter(Router router) {
+    private void createRouter(Integer port, List<Redirection> redirections) {
         try {
-            if (routers.get(router.getPort()) != null) {
+            if (routers.get(port) != null) {
                 scannerService.showMessage("Já existem um roteador sendo executado nessa porta!");
                 return;
             }
-            startRouterThread(router.getPort(), router);
+            Router router = new Router();
+            router.setPort(port);
+            router.getRoutingTable().addAllRedirections(redirections);
+            Connection connection = connectionService.getConnection(router.getPort());
+            router.setConnection(connection);
+            router.start();
             routers.put(router.getPort(), router);
             scannerService.showMessage("Roteador Criado com sucesso!");
         } catch (ApplicationException e) {
             e.printStackTrace();
         }
-    }
-
-    private void startRouterThread(Integer routerPort, Router router) throws ApplicationException {
-        Connection connection = connectionService.getConnection(routerPort);
-        ReceivePackegeThread receivePackegeThread = new ReceivePackegeThread(connection, router);
-        receivePackegeThread.start();
-        router.setReceiveThread(receivePackegeThread);
     }
 
     public void routerList() {
@@ -70,7 +64,7 @@ public class RouterService {
         System.out.format("+-----------------+----------------+%n");
         if (!routers.isEmpty()) {
             for (Map.Entry<Integer, Router> entry : routers.entrySet()) {
-                System.out.format(leftAlignFormat, entry.getValue().getPort(), entry.getValue().getRoutingTable().getCountRedirectionInRoutingTable());
+                System.out.format(leftAlignFormat, entry.getValue().getPort(), entry.getValue().getRoutingTable().getRedirections().size());
             }
         } else {
             System.out.format("| Nenhum roteador sendo executado  |%n");
@@ -89,8 +83,8 @@ public class RouterService {
         System.out.format("+-----------------+----------------+----------------+-----------------+%n");
         System.out.format("| Destino         | Mascara        | Gateway        | Interface Saida |%n");
         System.out.format("+-----------------+----------------+----------------+-----------------+%n");
-        if (router.getRoutingTable().getCountRedirectionInRoutingTable() > 0) {
-            for (Redirection redirection : router.getRoutingTable().getRoutingTable()) {
+        if (router.getRoutingTable().getRedirections().size() > 0) {
+            for (Redirection redirection : router.getRoutingTable().getRedirections()) {
                 System.out.format(leftAlignFormat, redirection.getDestiny(), RouterUtils.formatMaskCIDRNotation(redirection.getMask()), redirection.getGateway(), redirection.getInterfaceOutput());
             }
         } else {

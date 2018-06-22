@@ -1,6 +1,6 @@
 package br.com.urbieta.jeferson.utils;
 
-import br.com.urbieta.jeferson.model.entity.Redirection;
+import br.com.urbieta.jeferson.model.Redirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,30 +41,28 @@ public class RouterUtils {
     }
 
     public static List<Redirection> formattingRoutingTableFromCommand(String[] routersForRedirection) {
-        String routersForRedirectionList = "";
+        List<Redirection> redirections = new ArrayList<>();
         for (String redirection : routersForRedirection) {
             if (redirection.contains("/")) {
-                routersForRedirectionList = routersForRedirectionList + redirection + " ";
+                Redirection redirectionCreated = formattingRoutingTable(redirection);
+                if (redirectionCreated != null) {
+                    redirections.add(redirectionCreated);
+                }
             }
-        }
-        return formattingRoutingTable(routersForRedirectionList);
-    }
-
-    public static List<Redirection> formattingRoutingTable(String routersForRedirection) {
-        List<Redirection> redirections = new ArrayList<>();
-        String[] routers = routersForRedirection.split(" ");
-        for (String router : routers) {
-            String[] parts = router.split("/");
-            if (parts.length != 4) {
-                continue;
-            }
-            Redirection redirection = new Redirection();
-            redirection.setDestiny(parts[0]);
-            redirection.setMask(RouterUtils.formatMaskCIDRNotation(parts[1]));
-            redirection.setGateway(parts[2]);
-            redirection.setInterfaceOutput(Integer.valueOf(parts[3]));
-            redirections.add(redirection);
         }
         return redirections;
+    }
+
+    public static Redirection formattingRoutingTable(String router) {
+        String[] parts = router.split("/");
+        if (parts.length != 4) {
+            return null;
+        }
+        Redirection redirection = new Redirection();
+        redirection.setDestiny(parts[0]);
+        redirection.setMask(RouterUtils.formatMaskCIDRNotation(parts[1]));
+        redirection.setGateway(parts[2]);
+        redirection.setInterfaceOutput(Integer.valueOf(parts[3]));
+        return redirection;
     }
 }

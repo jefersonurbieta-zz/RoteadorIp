@@ -1,7 +1,7 @@
 package br.com.urbieta.jeferson.commom;
 
-import br.com.urbieta.jeferson.model.entity.Connection;
-import br.com.urbieta.jeferson.model.entity.Router;
+import br.com.urbieta.jeferson.model.Connection;
+import br.com.urbieta.jeferson.model.Router;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -18,6 +18,10 @@ public class ReceivePackegeThread extends Thread {
 
     private boolean running;
 
+    public ReceivePackegeThread() {
+        this.running = true;
+    }
+
     public ReceivePackegeThread(Connection connection, Router router) {
         this.connection = connection;
         this.router = router;
@@ -28,17 +32,25 @@ public class ReceivePackegeThread extends Thread {
         logger.info("Iniciado Thread Server Receive");
         try {
             while (running) {
-                byte[] receiveData = new byte[1024];
+                byte[] receiveData = new byte[65508];
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 connection.getServerSocket().receive(receivePacket);
-                new RouterProcessingThread(connection, router, receivePacket).start();
+                new RouterProcessingThread(router, receivePacket).start();
             }
         } catch (IOException | NullPointerException e) {
             logger.error(e);
         }
     }
 
-    public void setRunning(Boolean running) {
+    public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void setRouter(Router router) {
+        this.router = router;
     }
 }

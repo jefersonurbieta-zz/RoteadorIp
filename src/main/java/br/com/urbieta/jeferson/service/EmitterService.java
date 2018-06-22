@@ -2,8 +2,8 @@ package br.com.urbieta.jeferson.service;
 
 import br.com.urbieta.jeferson.commom.SendPackageThread;
 import br.com.urbieta.jeferson.exception.ApplicationException;
-import br.com.urbieta.jeferson.model.entity.Connection;
-import br.com.urbieta.jeferson.model.entity.Package;
+import br.com.urbieta.jeferson.model.Connection;
+import br.com.urbieta.jeferson.model.Package;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +37,15 @@ public class EmitterService {
         emitCommand(routerAddress, sourceAddress, destinationAddress, routerPort, message);
     }
 
-    private void emitCommand(String routerAddress, String sourceAddress, String destinationAddress, Integer routerPort, String message) throws ApplicationException {
-        Package packageToSend = new Package(routerAddress, sourceAddress, destinationAddress, routerPort, message);
+    public void emitPackage(String routerAddress, Integer routerPort, Package packageToSend) throws ApplicationException {
         Connection connection = connectionService.getConnection(routerPort);
-        new SendPackageThread(packageToSend, connection).start();
+        new SendPackageThread(routerAddress, routerPort, packageToSend, connection).start();
+    }
+
+    private void emitCommand(String routerAddress, String sourceAddress, String destinationAddress, Integer routerPort, String message) throws ApplicationException {
+        Package packageToSend = new Package(sourceAddress, destinationAddress, routerPort, message);
+        Connection connection = connectionService.getConnection(routerPort);
+        new SendPackageThread(routerAddress, routerPort, packageToSend, connection).start();
     }
 
 }

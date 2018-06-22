@@ -1,4 +1,4 @@
-package br.com.urbieta.jeferson.model.entity;
+package br.com.urbieta.jeferson.model;
 
 public class Redirection {
 
@@ -9,6 +9,10 @@ public class Redirection {
     private String gateway;
 
     private Integer interfaceOutput;
+
+    public boolean isDirect() {
+        return gateway != null && gateway.equals("0.0.0.0");
+    }
 
     public String getDestiny() {
         return destiny;
