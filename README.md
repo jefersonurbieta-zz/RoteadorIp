@@ -25,15 +25,60 @@ sourceAddress###destinationAddress###routerPort###message###tll###
 
 ao ser recebido o pacote e decodificado e processado.
 
+### Funcionalidades
+
+Na implementação foi feita uma interação por linha de comando, ao iniciar o programa é possivel executar comandos de acordo com as funcionalidades desenvolvidas.
+
+As funcionalidades implementadas podem ser vistas e acessadas através da ajuda que é printada ao iniciar o programa.
+
+````
++---------+----------------+-------------------------------------------------------------------+
+| Command | Name           | Description                                                       |
++---------+----------------+-------------------------------------------------------------------+
+| 0       | HELP           | Mostra os comandos implemetados no aplicativo                     |
+| 1       | EMIT_MESSAGE   | Emite uma messagem com os dados informados                        |
+| 2       | CREATE_ROUTER  | Cria um roteador com os dados informados                          |
+| 3       | ROUTER_LIST    | Lista todos os Roteadores ativos na maquina                       |
+| 4       | ROUTER_DETAIL  | Mostra as informações do roteador como a tabela de roteamento     |
+| 5       | STOP_ROUTER    | Para a execução de um roteador                                    |
++---------+----------------+-------------------------------------------------------------------+
+````
+
+### Arquitetura
+	
+Na arquitetura do código ficou dividida em algumas services e objetos de negocio cada uma com seu objetivo descrito abaixo. 
+
+#### Model
+
+ - Connection: Reponsalve por armazenar uma coneção aberta
+ - Package: Pacote enviado atraves da rede
+ - Redirection: Caminho na tabela de roteamento de um roteador
+ - Router: Objeto com o objetivo de representar um roteador
+ - RoutingTable: Tabela de roteamento de um roteador
+
+#### Service
+
+ - CommandService: Responsável por controlar a interação com o programa
+ - ConnectionService: Responsável por controlar a criação das conexões
+ - EmitterService: Responsável por emitir pacotes na rede
+ - RouterService: Responsável por criar, listar, detalhar e parar roteadores 
+
+### Emissor
+No emissor é possível enviar um pacote ao para o destino especificado, sendo possível fazer o envido de 2 formas, através do comando **emissor** ou colocar o comando 3 e ir colocando as informações separadamente de acordo com que é solicitado.
+
+### Roteador
+No roteador é possível se criar, listar, detalhar e parar um roteador com os comandos específicos. A criação assim como a emissão pode ser feita de 2 formas, através do comando **emissor** ou colocar o comando 3 e ir colocando as informações separadamente de acordo com que é solicitado.
+
+Ao se criar um roteador na porta especifica o programa inicia uma thread que fica aguardando para receber algum pacote. 
+
+Cada roteador tem uma tabela de roteamento que fica responsável por armazenar os caminhos para o redirecionamento dos pacotes e por processar o recebimento de um pacote para encontrar a rota para que ele seja encaminhado.
+
 ## Tecnologias
 - Java
 - log4j
 
 ## Execução
 Para a execução execute o método main da classe Main localizada em **src/main/java/br/com/urbieta/jeferson/ApplicationMain.java**
-
-## Log
-A aplicação armazena em um arquivo de log todas as suas operações realizadas. Este arquivo esta localizado na pasta do projeto com o nome app.log.
 
 ## Teste
 Alguns do casos de testes executados 

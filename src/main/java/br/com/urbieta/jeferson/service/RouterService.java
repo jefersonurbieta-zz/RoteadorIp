@@ -5,6 +5,7 @@ import br.com.urbieta.jeferson.model.Connection;
 import br.com.urbieta.jeferson.model.Redirection;
 import br.com.urbieta.jeferson.model.Router;
 import br.com.urbieta.jeferson.utils.RouterUtils;
+import br.com.urbieta.jeferson.utils.ScannerUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -15,8 +16,8 @@ public class RouterService {
     private Map<Integer, Router> routers = new TreeMap<Integer, Router>();
 
     public void createRouter() {
-        Integer routerPort = ScannerService.getInteger("Digite a porta do roteador default:");
-        String routersForRedirection = ScannerService.getString("Digite a lista de endereçõs de encaminhamento:");
+        Integer routerPort = ScannerUtils.getInteger("Digite a porta do roteador default:");
+        String routersForRedirection = ScannerUtils.getString("Digite a lista de endereçõs de encaminhamento:");
         String[] routersForRedirectionInParts = routersForRedirection.split(" ");
         List<Redirection> redirections = RouterUtils.formattingRoutingTableFromCommand(routersForRedirectionInParts);
         createRouter(routerPort, redirections);
@@ -32,7 +33,7 @@ public class RouterService {
     private void createRouter(Integer port, List<Redirection> redirections) {
         try {
             if (routers.get(port) != null) {
-                ScannerService.showMessage("There is already a router running on the port!");
+                ScannerUtils.showMessage("There is already a router running on the port!");
                 return;
             }
             Router router = new Router();
@@ -42,7 +43,7 @@ public class RouterService {
             router.setConnection(connection);
             router.start();
             routers.put(router.getPort(), router);
-            ScannerService.showMessage("Router Created!");
+            ScannerUtils.showMessage("Router Created!");
         } catch (ApplicationException e) {
             e.printStackTrace();
         }
@@ -65,11 +66,11 @@ public class RouterService {
 
     public void routerDetail(Integer routerPort) {
         if (routerPort == null) {
-            routerPort = ScannerService.getInteger("Digite a porta do roteador que deseja visualizar:");
+            routerPort = ScannerUtils.getInteger("Digite a porta do roteador que deseja visualizar:");
         }
         Router router = routers.get(routerPort);
         if (router == null) {
-            ScannerService.showMessage("No router running on the port!");
+            ScannerUtils.showMessage("No router running on the port!");
             return;
         }
         String leftAlignFormat = "| %-15s | %-14s | %-14s | %-15s |%n";
@@ -88,16 +89,16 @@ public class RouterService {
 
     public void stopRouter(Integer routerPort) {
         if (routerPort == null) {
-            routerPort = ScannerService.getInteger("Digite a porta do roteador que deseja parar:");
+            routerPort = ScannerUtils.getInteger("Digite a porta do roteador que deseja parar:");
         }
         Router router = routers.get(routerPort);
         if (router == null) {
-            ScannerService.showMessage("No redirection configured on this router!");
+            ScannerUtils.showMessage("No redirection configured on this router!");
             return;
         }
         router.stop();
         routers.remove(routerPort);
-        ScannerService.showMessage("Router stopped!");
+        ScannerUtils.showMessage("Router stopped!");
     }
 
 }

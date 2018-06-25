@@ -1,8 +1,8 @@
-package br.com.urbieta.jeferson.service;
+package br.com.urbieta.jeferson.utils;
 
 import java.util.Scanner;
 
-public class ScannerService {
+public class ScannerUtils {
 
     private static Scanner scanner = new Scanner(System.in);
 

@@ -4,15 +4,16 @@ import br.com.urbieta.jeferson.commom.SendPackageThread;
 import br.com.urbieta.jeferson.exception.ApplicationException;
 import br.com.urbieta.jeferson.model.Connection;
 import br.com.urbieta.jeferson.model.Package;
+import br.com.urbieta.jeferson.utils.ScannerUtils;
 
 public class EmitterService {
 
     public void emit() throws ApplicationException {
-        String routerAddress = ScannerService.getString("Digite o endereço do roteador default:");
-        Integer routerPort = ScannerService.getInteger("Digite a porta do roteador default:");
-        String sourceAddress = ScannerService.getString("Digite o endereço de origem:");
-        String destinationAddress = ScannerService.getString("Digite o endereço de destino:");
-        String message = ScannerService.getString("Digite a mensagem que deseja enviar:");
+        String routerAddress = ScannerUtils.getString("Digite o endereço do roteador default:");
+        Integer routerPort = ScannerUtils.getInteger("Digite a porta do roteador default:");
+        String sourceAddress = ScannerUtils.getString("Digite o endereço de origem:");
+        String destinationAddress = ScannerUtils.getString("Digite o endereço de destino:");
+        String message = ScannerUtils.getString("Digite a mensagem que deseja enviar:");
 
         emitCommand(routerAddress, sourceAddress, destinationAddress, routerPort, message);
     }
