@@ -15,6 +15,13 @@ public class RouterUtils {
             for (String part : parts) {
                 if (part.contains("255")) {
                     cidr += 8;
+                } else {
+                	Integer partInt = Integer.valueOf(part);
+                	String binary = Integer.toBinaryString(partInt);
+                	String[] binaryInParts = binary.split("");
+                	for(String b : binaryInParts) {
+                		cidr += Integer.valueOf(b);
+                	}
                 }
             }
         } else {
@@ -24,20 +31,21 @@ public class RouterUtils {
     }
 
     public static String formatMaskCIDRNotation(Integer numberInCIDNotation) {
-        switch (numberInCIDNotation) {
-            case 0:
-                return "0.0.0.0";
-            case 8:
-                return "255.0.0.0";
-            case 16:
-                return "255.255.0.0";
-            case 24:
-                return "255.255.255.0";
-            case 32:
-                return "255.255.255.255";
-            default:
-                return "255.255.255.255";
-        }
+    	return numberInCIDNotation.toString();
+//        switch (numberInCIDNotation) {
+//            case 0:
+//                return "0.0.0.0";
+//            case 8:
+//                return "255.0.0.0";
+//            case 16:
+//                return "255.255.0.0";
+//            case 24:
+//                return "255.255.255.0";
+//            case 32:
+//                return "255.255.255.255";
+//            default:
+//                return "255.255.255.255";
+//        }
     }
 
     public static List<Redirection> formattingRoutingTableFromCommand(String[] routersForRedirection) {
@@ -60,7 +68,11 @@ public class RouterUtils {
         }
         Redirection redirection = new Redirection();
         redirection.setDestiny(parts[0]);
-        redirection.setMask(RouterUtils.formatMaskCIDRNotation(parts[1]));
+        if(parts[1].contains(".")) {
+            redirection.setMask(RouterUtils.formatMaskCIDRNotation(parts[1]));
+        } else {
+        	redirection.setMask(Integer.valueOf(parts[1]));
+        }
         redirection.setGateway(parts[2]);
         redirection.setInterfaceOutput(Integer.valueOf(parts[3]));
         return redirection;

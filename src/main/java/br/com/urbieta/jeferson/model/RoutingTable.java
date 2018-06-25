@@ -19,7 +19,7 @@ public class RoutingTable {
     public Redirection findRouterToForward(String packageDestiny) {
         List<Redirection> combinedRedirects = new ArrayList<Redirection>();
         for (Redirection redirection : redirections) {
-            if (redirectionMatch(redirection, packageDestiny)) {
+            if (redirectionMatch2(redirection, packageDestiny)) {
                 combinedRedirects.add(redirection);
             }
         }
@@ -32,36 +32,34 @@ public class RoutingTable {
             return findRedirectionWithLongestMatch(combinedRedirects);
         }
     }
-
-    private boolean redirectionMatch(Redirection redirection, String packageDestiny) {
-        String[] packageDestinyParts = packageDestiny.split(Pattern.quote("."));
+    
+    private boolean redirectionMatch2(Redirection redirection, String packageDestiny) {
+    	String[] packageDestinyParts = packageDestiny.split(Pattern.quote("."));
         String[] redirectionDestinyParts = redirection.getDestiny().split(Pattern.quote("."));
-
-        boolean match = true;
-        if (redirection.getMask() >= 8 && !packageDestinyParts[0].equals(redirectionDestinyParts[0])) {
-            match = false;
+        
+        String packageDestinyBinary = "";
+        for(String part : packageDestinyParts) {
+        	packageDestinyBinary += getBinaryFromInt(Integer.parseInt(part));
         }
-        if (redirection.getMask() >= 16 && !packageDestinyParts[1].equals(redirectionDestinyParts[1])) {
-            match = false;
+        
+        String redirectionDestinyBinary = "";
+        for(String part : redirectionDestinyParts) {
+        	redirectionDestinyBinary += getBinaryFromInt(Integer.parseInt(part));
         }
-        if (redirection.getMask() >= 24 && !packageDestinyParts[2].equals(redirectionDestinyParts[2])) {
-            match = false;
+        
+        packageDestinyBinary = packageDestinyBinary.substring(0, redirection.getMask());
+        redirectionDestinyBinary = redirectionDestinyBinary.substring(0, redirection.getMask());
+        
+        if(redirection.getMask() == 0) {
+        	return true;
         }
-        if (redirection.getMask() >= 32 && !packageDestinyParts[3].equals(redirectionDestinyParts[3])) {
-            match = false;
-        }
-
-        return match;
+        
+        return packageDestinyBinary.equals(redirectionDestinyBinary);
     }
 
     private Redirection findRedirectionWithLongestMatch(List<Redirection> combinedRedirects) {
         Redirection redirectionWithLongestMatch = combinedRedirects.get(0);
         for (Redirection redirection : combinedRedirects) {
-            // Quando tem um redirecionamento direto na lista
-            if (redirection.getGateway().equals("0.0.0.0") && redirection.getInterfaceOutput() == 0) {
-                redirectionWithLongestMatch = redirection;
-                break;
-            }
             // Procura o redirecionamento com maior mascara
             if (redirection.getMask() > redirectionWithLongestMatch.getMask()) {
                 redirectionWithLongestMatch = redirection;
@@ -70,6 +68,35 @@ public class RoutingTable {
         return redirectionWithLongestMatch;
     }
 
+    private String getBinaryFromInt(Integer part) {
+    	String binary = Integer.toBinaryString(part);
+    	if(binary.length() < 8) {
+    		switch (8 - binary.length()) {
+			case 7:
+				binary = "0000000" + binary;
+				break;
+			case 6:
+				binary = "000000" + binary;
+				break;
+			case 5:
+				binary = "00000" + binary;
+				break;
+			case 4:
+				binary = "0000" + binary;
+				break;
+			case 3:
+				binary = "000" + binary;
+				break;
+			case 2:
+				binary = "00" + binary;
+				break;
+			case 1:
+				binary = "0" + binary;
+				break;
+			}
+    	}
+    	return binary;
+    }
     /*
      * Getters e Setters
      */
