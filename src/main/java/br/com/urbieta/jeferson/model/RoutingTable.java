@@ -9,7 +9,7 @@ public class RoutingTable {
     private List<Redirection> redirections;
 
     public RoutingTable() {
-        this.redirections = new ArrayList<>();
+        this.redirections = new ArrayList<Redirection>();
     }
 
     public void addAllRedirections(List<Redirection> redirections) {
@@ -17,7 +17,7 @@ public class RoutingTable {
     }
 
     public Redirection findRouterToForward(String packageDestiny) {
-        List<Redirection> combinedRedirects = new ArrayList<>();
+        List<Redirection> combinedRedirects = new ArrayList<Redirection>();
         for (Redirection redirection : redirections) {
             if (redirectionMatch(redirection, packageDestiny)) {
                 combinedRedirects.add(redirection);
@@ -26,7 +26,7 @@ public class RoutingTable {
 
         if (combinedRedirects.isEmpty()) {
             return null;
-        } else if (combinedRedirects.size() > 1) {
+        } else if (combinedRedirects.size() == 1) {
             return combinedRedirects.get(0);
         } else {
             return findRedirectionWithLongestMatch(combinedRedirects);
@@ -57,6 +57,12 @@ public class RoutingTable {
     private Redirection findRedirectionWithLongestMatch(List<Redirection> combinedRedirects) {
         Redirection redirectionWithLongestMatch = combinedRedirects.get(0);
         for (Redirection redirection : combinedRedirects) {
+            // Quando tem um redirecionamento direto na lista
+            if (redirection.getGateway().equals("0.0.0.0") && redirection.getInterfaceOutput() == 0) {
+                redirectionWithLongestMatch = redirection;
+                break;
+            }
+            // Procura o redirecionamento com maior mascara
             if (redirection.getMask() > redirectionWithLongestMatch.getMask()) {
                 redirectionWithLongestMatch = redirection;
             }

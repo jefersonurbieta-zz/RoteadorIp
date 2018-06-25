@@ -33,7 +33,6 @@ public class SendPackageThread extends Thread {
             byte[] sendData = packageToSend.toString().getBytes();
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, iPDestino, routerPort);
             connection.getServerSocket().send(sendPacket);
-            logger.info(" SENT: " + sendData + " - BYTES: " + sendData.length);
         } catch (IOException e) {
             logger.error(e);
         }

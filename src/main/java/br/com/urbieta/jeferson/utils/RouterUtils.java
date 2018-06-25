@@ -41,7 +41,7 @@ public class RouterUtils {
     }
 
     public static List<Redirection> formattingRoutingTableFromCommand(String[] routersForRedirection) {
-        List<Redirection> redirections = new ArrayList<>();
+        List<Redirection> redirections = new ArrayList<Redirection>();
         for (String redirection : routersForRedirection) {
             if (redirection.contains("/")) {
                 Redirection redirectionCreated = formattingRoutingTable(redirection);

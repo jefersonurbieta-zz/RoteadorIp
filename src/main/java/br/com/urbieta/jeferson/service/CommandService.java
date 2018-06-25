@@ -2,20 +2,17 @@ package br.com.urbieta.jeferson.service;
 
 import br.com.urbieta.jeferson.exception.ApplicationException;
 import br.com.urbieta.jeferson.model.enumeration.EnumCommands;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class CommandService {
 
-    private static final Logger logger = Logger.getLogger(CommandService.class);
-
-    @Autowired
     private RouterService routerService;
 
-    @Autowired
     private EmitterService emitterService;
+
+    public CommandService() {
+        this.routerService = new RouterService();
+        this.emitterService = new EmitterService();
+    }
 
     public void executeCommand(String commandString) {
         try {
@@ -36,7 +33,12 @@ public class CommandService {
                         routerService.routerList();
                         break;
                     case ROUTER_DETAIL:
-                        routerService.routerDetail();
+                        String[] parts = commandString.split(" ");
+                        if (parts.length > 1) {
+                            routerService.routerDetail(Integer.valueOf(parts[1]));
+                        } else {
+                            routerService.routerDetail(null);
+                        }
                         break;
                     case CREATE_ROUTER:
                         if (commandString.contains(EnumCommands.CREATE_ROUTER.getNome())) {
@@ -47,7 +49,12 @@ public class CommandService {
                         }
                         break;
                     case STOP_ROUTER:
-                        routerService.stopRouter();
+                        parts = commandString.split(" ");
+                        if (parts.length > 1) {
+                            routerService.stopRouter(Integer.valueOf(parts[1]));
+                        } else {
+                            routerService.stopRouter(null);
+                        }
                         break;
                     case HELP:
                         showHelp();
@@ -66,6 +73,9 @@ public class CommandService {
         } else {
             try {
                 String[] commandParts = command.split(" ");
+                if (commandParts[0].length() == 1) {
+                    return getCommandByIndex(Integer.valueOf(commandParts[0]));
+                }
                 return getCommandByName(commandParts[0]);
             } catch (IllegalArgumentException e) {
                 return null;

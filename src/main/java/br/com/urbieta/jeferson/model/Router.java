@@ -2,18 +2,11 @@ package br.com.urbieta.jeferson.model;
 
 import br.com.urbieta.jeferson.commom.ReceivePackegeThread;
 import br.com.urbieta.jeferson.exception.ApplicationException;
+import br.com.urbieta.jeferson.service.ConnectionService;
 import br.com.urbieta.jeferson.service.EmitterService;
-import br.com.urbieta.jeferson.service.ScannerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class Router {
 
-    @Autowired
-    private ScannerService scannerService;
-
-    @Autowired
     private EmitterService emitterService;
 
     private Integer port;
@@ -27,6 +20,7 @@ public class Router {
     public Router() {
         this.routingTable = new RoutingTable();
         this.receiveThread = new ReceivePackegeThread();
+        this.emitterService = new EmitterService();
     }
 
     public void start() throws ApplicationException {
@@ -38,12 +32,17 @@ public class Router {
         this.receiveThread.start();
     }
 
+    public void stop() {
+        this.receiveThread.setRunning(false);
+        ConnectionService.closeConnection(getPort());
+    }
+
     public void processReceipt(Package packageReceive) throws ApplicationException {
         packageReceive.decreaseTLL();
         // Caso o pacote exceda o TTL, será descartado
         if (packageReceive.getTll() == 0) {
             String message = "Time to Live exceeded in Transit, dropping packet for " + packageReceive.getDestinationAddress();
-            System.out.println(message);
+            printMessage(message);
             return;
         }
 
@@ -52,7 +51,7 @@ public class Router {
         // Caso não existe casamento para o destino na tabela de roteamento
         if (redirection == null) {
             String message = "Destination " + packageReceive.getDestinationAddress() + " not found in routing table, dropping packet";
-            System.out.println(message);
+            printMessage(message);
             return;
         }
 
@@ -61,18 +60,22 @@ public class Router {
             String message = "Destination reached. From " + packageReceive.getSourceAddress()
                     + " to " + packageReceive.getDestinationAddress()
                     + " : " + packageReceive.getMessage();
-            System.out.println(message);
+            printMessage(message);
             return;
         }
 
         // Caso seja recebido um pacote destinado a outro roteador
-        if (redirection.isDirect()) {
+        if (!redirection.isDirect()) {
             emitterService.emitPackage(redirection.getGateway(), redirection.getInterfaceOutput(), packageReceive);
             String message = "Forwarding packet for " + packageReceive.getDestinationAddress()
                     + " to next hop " + redirection.getGateway()
                     + " over interface " + redirection.getInterfaceOutput();
-            System.out.println(message);
+            printMessage(message);
         }
+    }
+
+    private void printMessage(String message) {
+        System.out.println("Router " + getPort() + "| " + message);
     }
 
     /*

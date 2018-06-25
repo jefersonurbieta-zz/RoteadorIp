@@ -39,7 +39,8 @@ public class ApplicationUtils {
     }
 
     public static InetAddress getLocalHostLANAIP() throws UnknownHostException {
-        try (final DatagramSocket socket = new DatagramSocket()) {
+        try {
+            final DatagramSocket socket = new DatagramSocket();
             socket.connect(InetAddress.getByName("8.8.8.8"), 15151);
             return socket.getLocalAddress();
         } catch (SocketException e) {

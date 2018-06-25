@@ -5,7 +5,6 @@ import br.com.urbieta.jeferson.model.Router;
 import org.apache.log4j.Logger;
 
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 
 
 public class RouterProcessingThread extends Thread {
@@ -22,15 +21,10 @@ public class RouterProcessingThread extends Thread {
     }
 
     public void run() {
-        logger.info("Iniciado Thread Server Receive");
         try {
             String sentence = new String(receivePacket.getData(), "UTF-8");
             Package packageReceive = new Package(sentence);
             router.processReceipt(packageReceive);
-
-            InetAddress addressIP = receivePacket.getAddress();
-            Integer port = receivePacket.getPort();
-            logger.info("ROUTER " + router.getPort() + " RECEIVED: FROM: " + addressIP.getHostAddress() + ":" + port + " - DATA: " + sentence);
         } catch (Exception e) {
             logger.error(e);
         }

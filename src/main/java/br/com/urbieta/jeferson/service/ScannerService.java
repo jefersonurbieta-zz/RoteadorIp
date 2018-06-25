@@ -1,30 +1,23 @@
 package br.com.urbieta.jeferson.service;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Scanner;
 
-@Service
 public class ScannerService {
 
-    private Scanner scanner;
+    private static Scanner scanner = new Scanner(System.in);
 
-    public ScannerService() {
-        this.scanner = new Scanner(System.in);
-    }
-
-    public String getString(String message) {
+    public static String getString(String message) {
         System.out.println(message);
         return scanner.nextLine();
     }
 
-    public Integer getInteger(String message) {
+    public static Integer getInteger(String message) {
         System.out.println(message);
         String line = scanner.nextLine();
         return Integer.valueOf(line);
     }
-    
-    public void showMessage(String message) {
+
+    public static void showMessage(String message) {
         System.out.println(message);
     }
 

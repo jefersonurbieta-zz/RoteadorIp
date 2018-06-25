@@ -29,7 +29,6 @@ public class ReceivePackegeThread extends Thread {
     }
 
     public void run() {
-        logger.info("Iniciado Thread Server Receive");
         try {
             while (running) {
                 byte[] receiveData = new byte[65508];
@@ -37,7 +36,7 @@ public class ReceivePackegeThread extends Thread {
                 connection.getServerSocket().receive(receivePacket);
                 new RouterProcessingThread(router, receivePacket).start();
             }
-        } catch (IOException | NullPointerException e) {
+        } catch (Exception e) {
             logger.error(e);
         }
     }

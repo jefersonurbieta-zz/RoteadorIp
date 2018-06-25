@@ -5,27 +5,18 @@ import br.com.urbieta.jeferson.model.Connection;
 import br.com.urbieta.jeferson.model.Redirection;
 import br.com.urbieta.jeferson.model.Router;
 import br.com.urbieta.jeferson.utils.RouterUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Service
 public class RouterService {
 
-    @Autowired
-    ScannerService scannerService;
-
-    @Autowired
-    ConnectionService connectionService;
-
-    private Map<Integer, Router> routers = new TreeMap<>();
+    private Map<Integer, Router> routers = new TreeMap<Integer, Router>();
 
     public void createRouter() {
-        Integer routerPort = scannerService.getInteger("Digite a porta do roteador default:");
-        String routersForRedirection = scannerService.getString("Digite a lista de endereçõs de encaminhamento:");
+        Integer routerPort = ScannerService.getInteger("Digite a porta do roteador default:");
+        String routersForRedirection = ScannerService.getString("Digite a lista de endereçõs de encaminhamento:");
         String[] routersForRedirectionInParts = routersForRedirection.split(" ");
         List<Redirection> redirections = RouterUtils.formattingRoutingTableFromCommand(routersForRedirectionInParts);
         createRouter(routerPort, redirections);
@@ -41,17 +32,17 @@ public class RouterService {
     private void createRouter(Integer port, List<Redirection> redirections) {
         try {
             if (routers.get(port) != null) {
-                scannerService.showMessage("Já existem um roteador sendo executado nessa porta!");
+                ScannerService.showMessage("There is already a router running on the port!");
                 return;
             }
             Router router = new Router();
             router.setPort(port);
             router.getRoutingTable().addAllRedirections(redirections);
-            Connection connection = connectionService.getConnection(router.getPort());
+            Connection connection = ConnectionService.getConnection(router.getPort());
             router.setConnection(connection);
             router.start();
             routers.put(router.getPort(), router);
-            scannerService.showMessage("Roteador Criado com sucesso!");
+            ScannerService.showMessage("Router Created!");
         } catch (ApplicationException e) {
             e.printStackTrace();
         }
@@ -67,43 +58,46 @@ public class RouterService {
                 System.out.format(leftAlignFormat, entry.getValue().getPort(), entry.getValue().getRoutingTable().getRedirections().size());
             }
         } else {
-            System.out.format("| Nenhum roteador sendo executado  |%n");
+            System.out.format("| No router running                |%n");
         }
         System.out.format("+-----------------+----------------+%n");
     }
 
-    public void routerDetail() {
-        Integer routerPort = scannerService.getInteger("Digite a porta do roteador que deseja visualizar:");
+    public void routerDetail(Integer routerPort) {
+        if (routerPort == null) {
+            routerPort = ScannerService.getInteger("Digite a porta do roteador que deseja visualizar:");
+        }
         Router router = routers.get(routerPort);
         if (router == null) {
-            scannerService.showMessage("Nenhum roteador sendo execultado nessa porta!");
+            ScannerService.showMessage("No router running on the port!");
             return;
         }
         String leftAlignFormat = "| %-15s | %-14s | %-14s | %-15s |%n";
         System.out.format("+-----------------+----------------+----------------+-----------------+%n");
-        System.out.format("| Destino         | Mascara        | Gateway        | Interface Saida |%n");
+        System.out.format("| Destiny         | Mask           | Gateway        | Interface Output|%n");
         System.out.format("+-----------------+----------------+----------------+-----------------+%n");
         if (router.getRoutingTable().getRedirections().size() > 0) {
             for (Redirection redirection : router.getRoutingTable().getRedirections()) {
                 System.out.format(leftAlignFormat, redirection.getDestiny(), RouterUtils.formatMaskCIDRNotation(redirection.getMask()), redirection.getGateway(), redirection.getInterfaceOutput());
             }
         } else {
-            System.out.format("| Nenhum registro de redirecionamento configurado neste roteador      |%n");
+            System.out.format("| No redirection configured on this router                            |%n");
         }
         System.out.format("+-----------------+----------------+----------------+-----------------+%n");
     }
 
-    public void stopRouter() {
-        Integer routerPort = scannerService.getInteger("Digite a porta do roteador que deseja parar:");
+    public void stopRouter(Integer routerPort) {
+        if (routerPort == null) {
+            routerPort = ScannerService.getInteger("Digite a porta do roteador que deseja parar:");
+        }
         Router router = routers.get(routerPort);
         if (router == null) {
-            scannerService.showMessage("Nenhum roteador sendo execultado nessa porta!");
+            ScannerService.showMessage("No redirection configured on this router!");
             return;
         }
-        router.getReceiveThread().setRunning(false);
-        connectionService.closeConnection(router.getPort());
+        router.stop();
         routers.remove(routerPort);
-        scannerService.showMessage("Roteador parado!");
+        ScannerService.showMessage("Router stopped!");
     }
 
 }
